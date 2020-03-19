@@ -23,8 +23,8 @@
             <!-- <ul class="navbar-nav mr-auto"></ul>と一つ空のul要素を記述 -->
             <!-- これにより2つ目のul要素のli要素がナビゲーションバーの右側に表示される -->
             <ul class="navbar-nav mr-auto"></ul>
-            <ul class="navbar-nav">
-                <li class="nav-item"><a href="#" class="nav-link">Signup</a></li>
+            <ul class="nav navbar-nav navbar-right">
+                <li class="nav-item">{!! link_to_route('signup.get', 'Signup', [], ['class' => 'nav-link']) !!}</li>
                 <li class="nav-item"><a href="#" class="nav-link">Login</a></li>
             </ul>
         </div>
