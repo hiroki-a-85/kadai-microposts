@@ -23,9 +23,26 @@
             <!-- <ul class="navbar-nav mr-auto"></ul>と一つ空のul要素を記述 -->
             <!-- これにより2つ目のul要素のli要素がナビゲーションバーの右側に表示される -->
             <ul class="navbar-nav mr-auto"></ul>
-            <ul class="nav navbar-nav navbar-right">
-                <li class="nav-item">{!! link_to_route('signup.get', 'Signup', [], ['class' => 'nav-link']) !!}</li>
-                <li class="nav-item"><a href="#" class="nav-link">Login</a></li>
+            <ul class="navbar-nav">
+                
+                <!-- Auth::check() -->
+                <!-- ユーザーがログインしているかどうかを調べる関数-->
+                @if (Auth::check())
+                    <li class="nav-item"><a href="#" class="nav-link">Users</a></li>
+                    
+                    <!-- ドロップダウンメニュー -->
+                    <li class="nav-item dropdown">
+                        <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">{{ Auth::user()->name }}</a>
+                        <ul class="dropdown-menu dropdown-menu-right">
+                            <li class="dropdown-item"><a href="#">My profile</a></li>
+                            <li class="dropdown-divider"></li>
+                            <li class="dropdown-item">{!! link_to_route('logout.get', 'Logout') !!}</li>
+                        </ul>
+                    </li>
+                @else
+                    <li class="nav-item">{!! link_to_route('signup.get', 'Signup', [], ['class' => 'nav-link']) !!}</li>
+                    <li class="nav-item">{!! link_to_route('login', 'Login', [], ['class' => 'nav-link']) !!}</li>
+                @endif
             </ul>
         </div>
     </nav>
