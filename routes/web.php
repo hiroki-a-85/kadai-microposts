@@ -11,9 +11,8 @@
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+//MicropostsControllerのindexアクションを経由してwelcomeを表示
+Route::get('/', 'MicropostsController@index');
 
 Route::get('signup', 'Auth\RegisterController@showRegistrationForm')->name('signup.get');
 Route::post('signup', 'Auth\RegisterController@register')->name('signup.post');
@@ -33,6 +32,12 @@ Route::get('logout', 'Auth\LoginController@logout')->name('logout.get');
 // GET URI:users Name:users.index Action:UsersController@index
 // GET URI:users/{id} Name:users.show Action:UsersController@show 
 
+//ログイン「している」状態でルーティング可能とするRoute::groupにルーティングを追加
+//Micropostsの、登録storeと削除destroyのみ
+// POST URI:microposts Name:microposts.store Action:MicropostsController@store
+// DELETE URI:microposts/{id} Name:microposts.destroy Action:MicropostsController@destroy 
+
 Route::group(['middleware' => ['auth']], function () {
     Route::resource('users', 'UsersController', ['only' => ['index', 'show']]);
+    Route::resource('microposts', 'MicropostsController', ['only' => ['store', 'destroy']]);
 });

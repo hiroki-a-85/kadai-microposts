@@ -26,4 +26,17 @@ class User extends Authenticatable
     protected $hidden = [
         'password', 'remember_token',
     ];
+    
+    //UserモデルとMicropostモデルの１対多の関係の記述
+    //Userモデル側にも記述
+    
+    //function microposts() 複数形でメソッドを定義
+    
+    //return $this->hasMany(Micropost::class);
+    //Userのインスタンスから、そのUserが持つMicropostsを、
+    //$user->microposts()->get()、もしくは$user->micropostsという記述で取得できる
+    public function microposts()
+    {
+        return $this->hasMany(Micropost::class);
+    }
 }

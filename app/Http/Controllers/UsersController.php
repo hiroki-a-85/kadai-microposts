@@ -26,9 +26,18 @@ class UsersController extends Controller
         //getでusers/idにアクセスされた場合の「取得表示処理」
         //User::find($id)により、idが渡された値のレコードを一つ取得
         $user = User::find($id);
+        $microposts = $user->microposts()->orderBy('created_at', 'desc')->paginate(10);
 
-        return view('users.show', [
+        $data = [
             'user' => $user,
-        ]);
+            'microposts' => $microposts,
+        ];
+
+        //Controller.phpで定義したcounts()関数を使用
+        //引数に渡した$userのmicropostの数を連想配列の形で取得
+        //それを連想配列データである$dataに加えている
+        $data += $this->counts($user);
+
+        return view('users.show', $data);
     }
 }
