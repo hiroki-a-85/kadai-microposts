@@ -108,4 +108,20 @@ class User extends Authenticatable
     {
         return $this->followings()->where('follow_id', $userId)->exists();
     }
+    
+    //自分がフォローしたユーザの投稿も表示するタイムラインの表示機能
+    //タイムライン用のマイクロポストを取得するためのメソッドを定義する
+    public function feed_microposts()
+    {
+        //実行したユーザがフォローしているユーザのidの配列を取得している
+        //$this->followings()によりフォローしているユーザのインスタンスを取得
+        //pluck('users.id')により、usersテーブルのidカラムの値だけを抜き出している
+        //toArray()により配列に変換している
+        $follow_user_ids = $this->followings()->pluck('users.id')->toArray();
+        
+        //自分をマイクロポストも表示させるため、自身のidも配列へ追加
+        $follow_user_ids[] = $this->id;
+        
+        return Micropost::whereIn('user_id', $follow_user_ids);
+    }
 }

@@ -7,19 +7,12 @@
     @if (Auth::check())
         <div class="row">
             <aside class="col-sm-4">
-                <div class="card">
-                    <div class="card-header">
-                        <h3 class="card-title">{{ Auth::user()->name }}</h3>
-                    </div>
-                    <div class="card-body">
-                        <img class="rounded img-fluid" src="{{ Gravatar::src(Auth::user()->email, 500) }}" alt="">
-                    </div>
-                </div>
+                @include('users.card', ['user' => Auth::user()])
             </aside>
             <div class="col-sm-8">
                 
                 <!-- micropost投稿フォーム -->
-                <!-- ログイン中のユーザIDが、MicropostsControllerから渡された$userのidを等しい時表示 -->
+                <!-- ログイン中のユーザIDが、MicropostsControllerから渡された$userのidと等しい時表示 -->
                 @if (Auth::id() == $user->id)
                     {!! Form::open(['route' => 'microposts.store']) !!}
                         <div class="form-group">
@@ -29,7 +22,6 @@
                     {!! Form::close() !!}
                 @endif
                 
-                <!-- ログイン中のユーザのmicropostsがある時、views/microposts/microposts.blade.phpを表示 -->
                 @if (count($microposts) > 0)
                     @include('microposts.microposts', ['microposts' => $microposts])
                 @endif

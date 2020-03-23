@@ -18,7 +18,7 @@ class MicropostsController extends Controller
             
             //orderBy('created_at', 'desc')->paginate(10)
             //created_atカラムを降順で取得して、1ページ10レコードでページネーション
-            $microposts = $user->microposts()->orderBy('created_at', 'desc')->paginate(10);
+            $microposts = $user->feed_microposts()->orderBy('created_at', 'desc')->paginate(10);
             
             $data = [
                 'user' => $user,
