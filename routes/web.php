@@ -39,5 +39,21 @@ Route::get('logout', 'Auth\LoginController@logout')->name('logout.get');
 
 Route::group(['middleware' => ['auth']], function () {
     Route::resource('users', 'UsersController', ['only' => ['index', 'show']]);
+    
+    //Route::group(['prefix' => 'users/{id}'], function () {...});
+    //このグループ内のルーティングのURLの最初に/users/{id}を付与する
+    //ex. POST /users/{id}/follow など
+    Route::group(['prefix' => 'users/{id}'], function () {
+        //{id}のユーザをフォローする
+        Route::post('follow', 'UserFollowController@store')->name('user.follow');
+        //{id}のユーザをアンフォローする
+        Route::delete('unfollow', 'UserFollowController@destroy')->name('user.unfollow');
+        //{id}のユーザがフォローしているユーザの一覧表示をする
+        Route::get('followings', 'UsersController@followings')->name('users.followings');
+        //{id}のユーザをフォローしているユーザ一覧を表示する
+        Route::get('followers', 'UsersController@followers')->name('users.followers');
+    });
+    
     Route::resource('microposts', 'MicropostsController', ['only' => ['store', 'destroy']]);
 });
+

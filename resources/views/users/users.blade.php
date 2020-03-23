@@ -12,12 +12,6 @@
                         {{ $user->name }}
                     </div>
                     <div>
-                            <?php
-                            //  .blade.phpの{!! !!}で囲った変数や関数は、{{ }}とは異なり、
-                            //  HTMLのタグがエスケープされない 
-                            //  つまり出力される<a>タグがそのまま機能する 
-                            //  第３引数でusers/{id}のidパラメータに値を渡している 
-                             ?>
                         <p>{!! link_to_route('users.show', 'View profile', ['id' => $user->id]) !!}</p>
                     </div>
                 </div>
