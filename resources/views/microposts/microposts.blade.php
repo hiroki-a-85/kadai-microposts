@@ -12,6 +12,19 @@
                     <p class="mb-0">{!! nl2br(e($micropost->content)) !!}</p>
                 </div>
                 <div>
+                    <!--　お気に入りに追加するボタン　-->
+                    @if (!Auth::user()->is_adding_into_favorites($micropost->id) && !Auth::user()->is_my_micropost($micropost->id))
+                        {!! Form::open(['route' => ['favorites.favorite', $micropost->id], 'method' => 'post']) !!}
+                            {!! Form::submit('Favorite', ['class' => 'btn btn-success btn-sm']) !!}
+                        {!! Form::close() !!}
+                    @endif
+                    
+                    <!--　お気に入りから外すボタン　-->
+                    @if (Auth::user()->is_adding_into_favorites($micropost->id))
+                        {!! Form::open(['route' => ['favorites.unfavorite', $micropost->id], 'method' => 'delete']) !!}
+                            {!! Form::submit('UnFavorite', ['class' => 'btn btn-secondary btn-sm']) !!}
+                        {!! Form::close() !!}
+                    @endif
                     
                     <!-- micropost削除ボタン -->
                     @if (Auth::id() == $micropost->user_id)

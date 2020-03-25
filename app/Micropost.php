@@ -21,4 +21,13 @@ class Micropost extends Model
     {
         return $this->belongsTo(User::class);
     }
+    
+    //投稿をお気に入りに追加する機能
+    //モデルに多対多の関係の記述→belongsToManyメソッド
+    //第1引数に得る対象であるMicropostクラス、第2引数には中間テーブルであるfavorites
+    //第3引数に自分のidを示す中間テーブルカラム名、第4引数に相手先のidを示す中間テーブルカラム名
+    public function favorite_users()
+    {
+        return $this->belongsToMany(User::class, 'favorites', 'micropost_id', 'user_id')->withTimestamps();
+    }
 }

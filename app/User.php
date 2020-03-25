@@ -124,4 +124,61 @@ class User extends Authenticatable
         
         return Micropost::whereIn('user_id', $follow_user_ids);
     }
+    
+    //投稿をお気に入りに追加する機能
+    //モデルに多対多の関係の記述→belongsToManyメソッド
+    //第1引数に得る対象であるMicropostクラス、第2引数には中間テーブルであるfavorites
+    //第3引数に自分のidを示す中間テーブルカラム名、第4引数に相手先のidを示す中間テーブルカラム名
+    public function favorites()
+    {
+        return $this->belongsToMany(Micropost::class, 'favorites', 'user_id', 'micropost_id')->withTimestamps();
+    }
+    
+    //現在のお気に入りの中に、$micropostIdがあるかどうか調べるメソッド
+    public function is_adding_into_favorites($micropostId)
+    {
+        return $this->favorites()->where('micropost_id', $micropostId)->exists();
+    }
+    
+    //現在の投稿したmicropostの中からidが$micropostIdのものがあるかどうか調べるメソッド
+    public function is_my_micropost($micropostId)
+    {
+        return $this->microposts()->where('id', $micropostId)->exists();
+    }
+    
+    //お気に入りに追加するメソッドfavorite($micropostId)を定義
+    public function favorite($micropostId)
+    {
+        $exist_in_favorites = $this->is_adding_into_favorites($micropostId);
+        
+        $exists_in_my_microposts = $this->is_my_micropost($micropostId);
+        
+        if ($exist_in_favorites) {
+            //お気に入りに追加していれば、何もしない
+            return false;
+        } elseif ($exists_in_my_microposts) {
+            //自分の投稿であれば、何もしない
+            return false;
+        } else {
+            //お気に入りになく、自分の投稿でもなければ、お気に入りに追加する
+            $this->favorites()->attach($micropostId);
+            return true;
+        }
+    }
+    
+    //お気に入りから外すメソッドunfavorite($micropostId)を定義
+    public function unfavorite($micropostId)
+    {
+        //既にお気に入りに追加しているかの確認
+        $exist = $this->is_adding_into_favorites($micropostId);
+        
+        if (!$exist) {
+            //既にお気に入りに追加していなければ、何もしない
+            return false;
+        } else {
+            //そうでなければ、お気に入りから外す
+            $this->favorites()->detach($micropostId);
+            return true;
+        }
+    }
 }
