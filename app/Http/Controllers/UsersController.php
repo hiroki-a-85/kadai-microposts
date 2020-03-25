@@ -34,7 +34,7 @@ class UsersController extends Controller
         ];
 
         //Controller.phpで定義したcounts()関数を使用
-        //引数に渡した$userのmicropostの数を連想配列の形で取得
+        //引数に渡した$userのmicropost、follower、followingの数を連想配列の形で取得
         //それを連想配列データである$dataに加えている
         $data += $this->counts($user);
 

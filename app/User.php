@@ -114,7 +114,7 @@ class User extends Authenticatable
     public function feed_microposts()
     {
         //実行したユーザがフォローしているユーザのidの配列を取得している
-        //$this->followings()によりフォローしているユーザのインスタンスを取得
+        //$this->followings()によりフォローしているユーザ情報を取得
         //pluck('users.id')により、usersテーブルのidカラムの値だけを抜き出している
         //toArray()により配列に変換している
         $follow_user_ids = $this->followings()->pluck('users.id')->toArray();
