@@ -11,16 +11,14 @@
                 <div>
                     <p class="mb-0">{!! nl2br(e($micropost->content)) !!}</p>
                 </div>
-                <div>
+                <div class="d-flex">
                     <!--　お気に入りに追加するボタン　-->
-                    @if (!Auth::user()->is_adding_into_favorites($micropost->id) && !Auth::user()->is_my_micropost($micropost->id))
+                    @if (!Auth::user()->is_in_favorites($micropost->id))
                         {!! Form::open(['route' => ['favorites.favorite', $micropost->id], 'method' => 'post']) !!}
                             {!! Form::submit('Favorite', ['class' => 'btn btn-success btn-sm']) !!}
                         {!! Form::close() !!}
-                    @endif
-                    
+                    @else
                     <!--　お気に入りから外すボタン　-->
-                    @if (Auth::user()->is_adding_into_favorites($micropost->id))
                         {!! Form::open(['route' => ['favorites.unfavorite', $micropost->id], 'method' => 'delete']) !!}
                             {!! Form::submit('UnFavorite', ['class' => 'btn btn-secondary btn-sm']) !!}
                         {!! Form::close() !!}
@@ -29,7 +27,7 @@
                     <!-- micropost削除ボタン -->
                     @if (Auth::id() == $micropost->user_id)
                         {!! Form::open(['route' => ['microposts.destroy', $micropost->id], 'method' => 'delete']) !!}
-                            {!! Form::submit('Delete', ['class' => 'btn btn-danger btn-sm']) !!}
+                            {!! Form::submit('Delete', ['class' => 'btn btn-danger btn-sm ml-2']) !!}
                         {!! Form::close() !!}
                     @endif
                 </div>

@@ -135,32 +135,21 @@ class User extends Authenticatable
     }
     
     //現在のお気に入りの中に、$micropostIdがあるかどうか調べるメソッド
-    public function is_adding_into_favorites($micropostId)
+    public function is_in_favorites($micropostId)
     {
         return $this->favorites()->where('micropost_id', $micropostId)->exists();
-    }
-    
-    //現在の投稿したmicropostの中からidが$micropostIdのものがあるかどうか調べるメソッド
-    public function is_my_micropost($micropostId)
-    {
-        return $this->microposts()->where('id', $micropostId)->exists();
     }
     
     //お気に入りに追加するメソッドfavorite($micropostId)を定義
     public function favorite($micropostId)
     {
-        $exist_in_favorites = $this->is_adding_into_favorites($micropostId);
+        $exist = $this->is_in_favorites($micropostId);
         
-        $exists_in_my_microposts = $this->is_my_micropost($micropostId);
-        
-        if ($exist_in_favorites) {
+        if ($exist) {
             //お気に入りに追加していれば、何もしない
             return false;
-        } elseif ($exists_in_my_microposts) {
-            //自分の投稿であれば、何もしない
-            return false;
         } else {
-            //お気に入りになく、自分の投稿でもなければ、お気に入りに追加する
+            //お気に入りになければ、お気に入りに追加する
             $this->favorites()->attach($micropostId);
             return true;
         }
@@ -170,7 +159,7 @@ class User extends Authenticatable
     public function unfavorite($micropostId)
     {
         //既にお気に入りに追加しているかの確認
-        $exist = $this->is_adding_into_favorites($micropostId);
+        $exist = $this->is_in_favorites($micropostId);
         
         if (!$exist) {
             //既にお気に入りに追加していなければ、何もしない
